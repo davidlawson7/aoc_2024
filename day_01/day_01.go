@@ -77,11 +77,43 @@ func totalDistance(distances []int) int {
 	return sum
 }
 
+func findScores(left *[]int, right *[]int) *[]int {
+	scores := make([]int, 0, len(*left))
+
+	m := make(map[int]int)
+
+	for i := 0; i < len(*left); i++ {
+		score, ok := m[(*left)[i]]
+
+		if ok {
+			// Value has been found before
+			scores = append(scores, score)
+			continue
+		}
+
+		// Find the score for this value
+		count := 0
+		for j := 0; j < len(*right); j++ {
+			if (*left)[i] == (*right)[j] {
+				count += 1
+			}
+		}
+		m[(*left)[i]] = (*left)[i] * count
+		s := m[(*left)[i]]
+
+		// Add the new value
+		scores = append(scores, s)
+	}
+
+	return &scores
+}
+
 func main() {
 	filePath := os.Args[1]
 	left, right := extractData(&filePath)
-	distances := calcDistances(*left, *right)
+
+	distances := findScores(left, right)
 	td := totalDistance(*distances)
 
-	fmt.Printf("Total Distance: %d\n", td)
+	fmt.Printf("Total Score: %d\n", td)
 }

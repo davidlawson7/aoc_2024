@@ -44,3 +44,21 @@ func TestTotalDistance(t *testing.T) {
 		t.Fatalf(`totalDistance(distances) :: expected: %d, actual: %d`, expected, actual)
 	}
 }
+
+func TestFindScores(t *testing.T) {
+	// 1, 2, 3, 3, 3, 4
+	left := [6]int{3, 4, 2, 1, 3, 3}
+	leftS := left[:]
+	leftP := &leftS
+	// 3, 3, 3, 4, 5, 9
+	right := [6]int{4, 3, 5, 3, 9, 3}
+	rightS := right[:]
+	rightP := &rightS
+
+	expected := [6]int{9, 4, 0, 0, 9, 9}
+	actual := findScores(leftP, rightP)
+
+	if !slices.Equal(*actual, expected[:]) {
+		t.Fatalf(`calcDistances(left, right) :: expected: %d, actual: %d`, expected, *actual)
+	}
+}
