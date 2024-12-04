@@ -43,9 +43,6 @@ func extractData(filePath *string) (*[]int, *[]int) {
 		}
 	}
 
-	// slices.Sort(left)
-	// slices.Sort(right)
-
 	return &left, &right
 }
 
