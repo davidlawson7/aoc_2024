@@ -76,19 +76,45 @@ func (w WordSearch) CheckEachDirection(row int, col int) int {
 	return count
 }
 
-func (w WordSearch) FindAllXMAS() int {
+func (w WordSearch) CheckForMAS(row int, col int) bool {
+	lt := w.GetLetter(row-1, col-1)
+	rb := w.GetLetter(row+1, col+1)
+
+	lb := w.GetLetter(row+1, col-1)
+	rt := w.GetLetter(row-1, col+1)
+
+	if ((lt == "M" && rb == "S") || (lt == "S" && rb == "M")) && ((lb == "M" && rt == "S") || (lb == "S" && rt == "M")) {
+		return true
+	}
+	return false
+}
+
+func (w WordSearch) CheckForTwoDiagonalXMAS(row int, col int) int {
+	count := 0
+	if l := w.GetLetter(row, col); l == "A" {
+		if w.CheckForMAS(row, col) {
+			count++
+		}
+	}
+	return count
+}
+
+func (w WordSearch) FindAllXMAS() (wordCode int, xmasCount int) {
 	r, c := w.GetBounds()
 	wc := 0
+	xm := 0
 	for i := 0; i <= r; i++ {
 		for j := 0; j <= c; j++ {
 			wc = wc + w.CheckEachDirection(i, j)
+			xm = xm + w.CheckForTwoDiagonalXMAS(i, j)
 		}
 	}
-	return wc
+	return wc, xm
 }
 
 func main() {
 	w := WordSearchInit("day_04/input.txt")
-	wc := w.FindAllXMAS()
+	wc, xm := w.FindAllXMAS()
 	fmt.Printf("Word Count: %d\n", wc)
+	fmt.Printf("X-MAS Count: %d\n", xm)
 }
